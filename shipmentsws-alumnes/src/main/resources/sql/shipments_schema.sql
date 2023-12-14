@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS shipmentsdb CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci;
+USE shipmentsdb;
 
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -24,11 +26,11 @@ DROP TABLE IF EXISTS `actions`;
 CREATE TABLE IF NOT EXISTS `actions` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `type` varchar(31) NOT NULL,
-  `performer_username` varchar(255) NOT NULL,
+  `performer_username` varchar(25) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `shipment_id` bigint NOT NULL,
   `tracking_number` int DEFAULT NULL,
-  `courier_username` varchar(255) DEFAULT NULL,
+  `courier_username` varchar(25) DEFAULT NULL,
   `priority` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_action_shipment_x_date` (`date` DESC,`shipment_id`),
