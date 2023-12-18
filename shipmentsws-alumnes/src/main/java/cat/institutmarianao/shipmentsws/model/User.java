@@ -2,6 +2,12 @@ package cat.institutmarianao.shipmentsws.model;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.DiscriminatorFormula;
+
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -12,6 +18,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "users")
+@DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "user_role")
 public abstract class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,6 +43,7 @@ public abstract class User implements Serializable {
 
 	/* Lombok */
 	@EqualsAndHashCode.Include
+	@Id
 	protected String username;
 
 	protected Role role;

@@ -5,8 +5,11 @@ import java.util.List;
 
 import org.hibernate.annotations.Formula;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +22,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+@Table(name = "shipments")
 public class Shipment implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -39,6 +44,7 @@ public class Shipment implements Serializable {
 
 	/* Lombok */
 	@EqualsAndHashCode.Include
+	@Id
 	private Long id;
 
 	private Category category;
