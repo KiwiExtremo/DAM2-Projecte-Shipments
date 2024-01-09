@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,8 +20,9 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue("courier")
 public class Courier extends User implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Company company;
-
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

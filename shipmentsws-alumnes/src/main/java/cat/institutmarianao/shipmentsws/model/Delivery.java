@@ -16,5 +16,5 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Delivery extends Action implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 }

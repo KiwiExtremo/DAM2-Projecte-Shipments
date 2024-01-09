@@ -3,14 +3,15 @@ package cat.institutmarianao.shipmentsws.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.hibernate.annotations.DiscriminatorFormula;
-
 import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,36 +24,38 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-
 @Table(name = "actions")
 public abstract class Action implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/* Values for type - MUST be constants */
-	public static final String RECEPTION = "RECEPTION";
-	public static final String ASSIGNMENT = "ASSIGNMENT";
-	public static final String DELIVERY = "DELIVERY";
+    /* Values for type - MUST be constants */
+    public static final String RECEPTION = "RECEPTION";
+    public static final String ASSIGNMENT = "ASSIGNMENT";
+    public static final String DELIVERY = "DELIVERY";
 
-	public enum Type {
-		RECEPTION, ASSIGNMENT, DELIVERY
-	}
+    public enum Type {
+        RECEPTION, ASSIGNMENT, DELIVERY
+    }
 
-	/* Lombok */
-	@EqualsAndHashCode.Include
-	@Id
-	@Column
-	protected Long id;
-	
-	@Column
-	protected Type type;
-	
-	@Column
-	protected User performer;
-	
-	@Column
-	protected Date date = new Date();
-	
-	@Column
-	protected Shipment shipment;
+    /* Lombok */
+    @EqualsAndHashCode.Include
+    @Id
+    @Column(name = "id")
+    protected Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    protected Type type;
+
+    @ManyToOne
+    @JoinColumn(name = "performer_username")
+    protected User performer;
+
+    @Column(name = "date", nullable = false)
+    protected Date date = new Date();
+
+    @ManyToOne
+    @JoinColumn(name = "shipment_id", nullable = false)
+    protected Shipment shipment;
 }

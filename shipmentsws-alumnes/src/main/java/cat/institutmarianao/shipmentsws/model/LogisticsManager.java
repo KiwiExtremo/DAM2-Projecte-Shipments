@@ -18,6 +18,5 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorValue("logisticManager")
 public class LogisticsManager extends Receptionist implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1L;
 }

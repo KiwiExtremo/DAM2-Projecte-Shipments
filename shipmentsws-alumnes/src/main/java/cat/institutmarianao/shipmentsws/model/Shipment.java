@@ -3,13 +3,10 @@ package cat.institutmarianao.shipmentsws.model;
 import java.io.Serializable;
 import java.util.List;
 
+import jakarta.persistence.*;
+
 import org.hibernate.annotations.Formula;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,54 +23,73 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "shipments")
 public class Shipment implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final int MAX_DESCRIPTION = 500;
+    public static final int MAX_DESCRIPTION = 500;
 
-	public enum Category {
-		PARTICULAR, COMPANY, GOVERNMENT
-	}
+    public enum Category {
+        PARTICULAR, COMPANY, GOVERNMENT
+    }
 
-	public static final String PENDING = "PENDING";
-	public static final String IN_PROCESS = "IN_PROCESS";
-	public static final String DELIVERED = "DELIVERED";
+    public static final String PENDING = "PENDING";
+    public static final String IN_PROCESS = "IN_PROCESS";
+    public static final String DELIVERED = "DELIVERED";
 
-	public enum Status {
-		PENDING, IN_PROCESS, DELIVERED
-	}
+    public enum Status {
+        PENDING, IN_PROCESS, DELIVERED
+    }
 
-	/* Lombok */
-	@EqualsAndHashCode.Include
-	@Id
-	private Long id;
+    /* Lombok */
+    @EqualsAndHashCode.Include
+    @Id
+    @Column(name = "id")
+    private Long id;
 
-	private Category category;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private Category category;
 
-	private Address sender;
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    private Address sender;
 
-	private Address recipient;
+    @ManyToOne
+    @JoinColumn(name = "recipient_id")
+    private Address recipient;
 
-	private Float weight;
-	private Float height;
-	private Float width;
-	private Float length;
+    @Column(name = "weight")
+    private Float weight;
 
-	private Boolean express;
-	private Boolean fragile;
+    @Column(name = "height")
+    private Float height;
 
-	private String note;
+    @Column(name = "width")
+    private Float width;
 
-	private List<Action> tracking;
+    @Column(name = "length")
+    private Float length;
 
-	/* JPA */
-	@Enumerated(EnumType.STRING) // Stored as string
-	/* Hibernate */
-	@Formula("(SELECT CASE a.type WHEN '" + Action.RECEPTION + "' THEN '" + PENDING + "' " + " WHEN '"
-			+ Action.ASSIGNMENT + "' THEN '" + IN_PROCESS + "' " + " WHEN '" + Action.DELIVERY + "' THEN '" + DELIVERED
-			+ "' ELSE NULL END FROM actions a "
-			+ " WHERE a.date=( SELECT MAX(last_action.date) FROM actions last_action "
-			+ " WHERE last_action.shipment_id=a.shipment_id AND last_action.shipment_id=id ))")
-	// Lombok
-	@Setter(AccessLevel.NONE)
-	private Status status;
+    @Column(name = "express")
+    private Boolean express;
+
+    @Column(name = "fragile")
+    private Boolean fragile;
+
+    @Column(name = "note", length = MAX_DESCRIPTION)
+    private String note;
+
+    @OneToMany(mappedBy = "shipment")
+    private List<Action> tracking;
+
+    /* JPA */
+    @Enumerated(EnumType.STRING) // Stored as string
+    /* Hibernate */
+    @Formula("(SELECT CASE a.type WHEN '" + Action.RECEPTION + "' THEN '" + PENDING + "' " + " WHEN '"
+            + Action.ASSIGNMENT + "' THEN '" + IN_PROCESS + "' " + " WHEN '" + Action.DELIVERY + "' THEN '" + DELIVERED
+            + "' ELSE NULL END FROM actions a "
+            + " WHERE a.date=( SELECT MAX(last_action.date) FROM actions last_action "
+            + " WHERE last_action.shipment_id=a.shipment_id AND last_action.shipment_id=id ))")
+    // Lombok
+    @Setter(AccessLevel.NONE)
+    private Status status;
 }

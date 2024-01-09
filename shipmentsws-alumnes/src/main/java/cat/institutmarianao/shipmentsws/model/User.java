@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import org.hibernate.annotations.DiscriminatorFormula;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,38 +23,43 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "user_role")
 public abstract class User implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/* Values for role - MUST be constants (can not be enums) */
-	public static final String RECEPTIONIST = "RECEPTIONIST";
-	public static final String LOGISTICS_MANAGER = "LOGISTICS_MANAGER";
-	public static final String COURIER = "COURIER";
+    /* Values for role - MUST be constants (can not be enums) */
+    public static final String RECEPTIONIST = "RECEPTIONIST";
+    public static final String LOGISTICS_MANAGER = "LOGISTICS_MANAGER";
+    public static final String COURIER = "COURIER";
 
-	public enum Role {
-		RECEPTIONIST, LOGISTICS_MANAGER, COURIER
-	}
+    public enum Role {
+        RECEPTIONIST, LOGISTICS_MANAGER, COURIER
+    }
 
-	public static final int MIN_USERNAME = 2;
-	public static final int MAX_USERNAME = 25;
-	public static final int MIN_PASSWORD = 4;
-	public static final int MIN_FULL_NAME = 3;
-	public static final int MAX_FULL_NAME = 100;
-	public static final int MAX_EXTENSION = 9999;
+    public static final int MIN_USERNAME = 2;
+    public static final int MAX_USERNAME = 25;
+    public static final int MIN_PASSWORD = 4;
+    public static final int MIN_FULL_NAME = 3;
+    public static final int MAX_FULL_NAME = 100;
+    public static final int MAX_EXTENSION = 9999;
 
-	/* Lombok */
-	@EqualsAndHashCode.Include
-	@Id
-	protected String username;
+    /* Lombok */
+    @EqualsAndHashCode.Include
+    @Id
+    @Column(name = "username", nullable = false, length = MAX_USERNAME)
+    protected String username;
 
-	protected Role role;
+    @Column(name = "role", nullable = false, length = MAX_FULL_NAME)
+    protected Role role;
 
-	protected String password;
+    @Column(name = "password", nullable = false)
+    protected String password;
 
-	protected String fullName;
+    @Column(name = "full_name", nullable = false, length = MAX_FULL_NAME)
+    protected String fullName;
 
-	protected Integer extension;
-
+    @Column(name = "extension")
+    protected Integer extension;
 }

@@ -2,7 +2,10 @@ package cat.institutmarianao.shipmentsws.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,13 +19,15 @@ import lombok.experimental.SuperBuilder;
 @Entity
 public class Assignment extends Action implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final int MIN_PRIORITAT = 1;
-	public static final int MAX_PRIORITAT = 3;
+    public static final int MIN_PRIORITAT = 1;
+    public static final int MAX_PRIORITAT = 3;
 
-	private Courier courier;
+    @ManyToOne
+    @JoinColumn(name = "courier_username")
+    private Courier courier;
 
-	private Integer priority;
-
+    @Column(name = "priority")
+    private Integer priority;
 }

@@ -1,10 +1,8 @@
-/**
- *
- */
 package cat.institutmarianao.shipmentsws.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -20,14 +18,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "companies")
 public class Company implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public static final int MAX_NAME = 100;
+    /* Lombok */
+    @EqualsAndHashCode.Include
+    @Id
+    @Column(name = "id")
+    private Long id;
 
-	/* Lombok */
-	@EqualsAndHashCode.Include
-	@Id
-	private Long id;
-
-	private String name;
+    @Column(name = "name")
+    private String name;
 }
