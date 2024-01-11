@@ -3,6 +3,8 @@ package cat.institutmarianao.shipmentsws.model;
 import java.io.Serializable;
 import java.util.Date;
 
+
+import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,8 +25,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "actions")
+
+
 public abstract class Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,7 +50,7 @@ public abstract class Action implements Serializable {
     protected Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
+    @Column(insertable = false, updatable = false)
     protected Type type;
 
     @ManyToOne
