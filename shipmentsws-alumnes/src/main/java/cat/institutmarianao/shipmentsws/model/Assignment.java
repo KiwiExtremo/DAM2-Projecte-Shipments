@@ -19,8 +19,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("ASSIGNMENT")  
-@Table(name = "assignment")
+@DiscriminatorValue(Action.ASSIGNMENT)  
 public class Assignment extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

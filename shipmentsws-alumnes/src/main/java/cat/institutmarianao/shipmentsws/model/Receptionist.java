@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@DiscriminatorValue("receptionist")
+@DiscriminatorValue(User.RECEPTIONIST)
 public class Receptionist extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;

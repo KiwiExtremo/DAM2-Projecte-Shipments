@@ -51,7 +51,7 @@ public abstract class User implements Serializable {
     @Column(name = "username", nullable = false, length = MAX_USERNAME)
     protected String username;
 
-    @Column(name = "role", nullable = false, length = MAX_FULL_NAME)
+    @Column(name = "role", nullable = false, length = MAX_FULL_NAME, columnDefinition = "varchar(31)")
     protected Role role;
 
     @Column(name = "password", nullable = false)
