@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import org.hibernate.annotations.DiscriminatorFormula;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.*;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -25,6 +28,12 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "user_role")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "role", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Receptionist.class, name = User.RECEPTIONIST),
+        @JsonSubTypes.Type(value = LogisticsManager.class, name = User.LOGISTICS_MANAGER),
+        @JsonSubTypes.Type(value = Courier.class, name = User.COURIER)
+})
 public abstract class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
