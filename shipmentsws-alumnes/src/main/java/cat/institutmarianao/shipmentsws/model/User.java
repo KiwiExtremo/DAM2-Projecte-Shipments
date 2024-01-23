@@ -1,6 +1,11 @@
 package cat.institutmarianao.shipmentsws.model;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.DiscriminatorFormula;
 
@@ -11,10 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import java.io.Serializable;
 
 /* Lombok */
 @Data
@@ -25,6 +27,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "user_role")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,17 +52,22 @@ public abstract class User implements Serializable {
     @EqualsAndHashCode.Include
     @Id
     @Column(name = "username", nullable = false, length = MAX_USERNAME)
+    @JsonProperty("username")
     protected String username;
 
     @Column(name = "role", nullable = false, length = MAX_FULL_NAME, columnDefinition = "varchar(31)")
+    @JsonProperty("role")
     protected Role role;
 
     @Column(name = "password", nullable = false)
+    @JsonProperty("password")
     protected String password;
 
     @Column(name = "full_name", nullable = false, length = MAX_FULL_NAME)
+    @JsonProperty("fullName")
     protected String fullName;
 
     @Column(name = "extension")
+    @JsonProperty("extension")
     protected Integer extension;
 }
