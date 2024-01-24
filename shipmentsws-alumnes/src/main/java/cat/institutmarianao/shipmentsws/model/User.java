@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.DiscriminatorFormula;
-
+import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -26,7 +26,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "user_role")
+@DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class User implements Serializable {
 
@@ -54,8 +54,9 @@ public abstract class User implements Serializable {
     @Column(name = "username", nullable = false, length = MAX_USERNAME)
     @JsonProperty("username")
     protected String username;
-
-    @Column(name = "role", nullable = false, length = MAX_FULL_NAME, columnDefinition = "varchar(31)")
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = MAX_FULL_NAME)
     @JsonProperty("role")
     protected Role role;
 
