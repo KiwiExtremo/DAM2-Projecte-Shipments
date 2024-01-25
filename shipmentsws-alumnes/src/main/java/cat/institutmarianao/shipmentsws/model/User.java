@@ -2,12 +2,17 @@ package cat.institutmarianao.shipmentsws.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.DiscriminatorFormula;
+import org.hibernate.mapping.Set;
+
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorType;
@@ -28,6 +33,15 @@ import java.io.Serializable;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonTypeInfo(
+	use = JsonTypeInfo.Id.NAME,
+	property= "role"
+)
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = Courier.class, name = "COURIER"),
+	@JsonSubTypes.Type(value = Receptionist.class, name = "RECEPTIONIST"),
+	@JsonSubTypes.Type(value = LogisticsManager.class, name = "LOGISTIC_MANAGER"),
+})
 public abstract class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,4 +85,6 @@ public abstract class User implements Serializable {
     @Column(name = "extension")
     @JsonProperty("extension")
     protected Integer extension;
+    
+    
 }
