@@ -3,6 +3,7 @@ package cat.institutmarianao.shipmentsws.controllers;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,8 @@ import cat.institutmarianao.shipmentsws.model.Action;
 import cat.institutmarianao.shipmentsws.model.Shipment;
 import cat.institutmarianao.shipmentsws.model.Shipment.Category;
 import cat.institutmarianao.shipmentsws.model.Shipment.Status;
+import cat.institutmarianao.shipmentsws.services.ShipmentService;
+import cat.institutmarianao.shipmentsws.services.UserService;
 import cat.institutmarianao.shipmentsws.validation.groups.OnActionCreate;
 import cat.institutmarianao.shipmentsws.validation.groups.OnShipmentCreate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,11 +42,11 @@ import jakarta.validation.constraints.Positive;
 @Validated
 public class ShipmentController {
 
-//	@Autowired
-//	private UserService userService;
+	@Autowired
+	private UserService userService;
 //
-//	@Autowired
-//	private ShipmentService shipmentService;
+	@Autowired
+	private ShipmentService shipmentService;
 //
 //	@Autowired
 //	private ActionService actionService;
