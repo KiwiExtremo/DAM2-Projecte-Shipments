@@ -58,8 +58,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public List<User> findAll(Role[] roles, String fullName) {
-		Specification<User> spec = Specification.where(new UserWithRole(roles)).and(new UserWithFullName(fullName));
+	public List<User> findAll(Role[] roles) {
+		Specification<User> spec = Specification.where(new UserWithRole(roles));
 		return userRepository.findAll(spec);
 	}
 

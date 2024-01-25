@@ -3,8 +3,14 @@ package cat.institutmarianao.shipmentsws.services.impl;
 import cat.institutmarianao.shipmentsws.exception.NotFoundException;
 import cat.institutmarianao.shipmentsws.model.Action;
 import cat.institutmarianao.shipmentsws.model.Shipment;
+import cat.institutmarianao.shipmentsws.model.User;
+import cat.institutmarianao.shipmentsws.model.Shipment.Category;
 import cat.institutmarianao.shipmentsws.repositories.ShipmentRepository;
 import cat.institutmarianao.shipmentsws.services.ShipmentService;
+import cat.institutmarianao.shipmentsws.specifications.ShipmentInProgress;
+import cat.institutmarianao.shipmentsws.specifications.ShipmentPending;
+import cat.institutmarianao.shipmentsws.specifications.UserWithFullName;
+import cat.institutmarianao.shipmentsws.specifications.UserWithRole;
 import cat.institutmarianao.shipmentsws.validation.groups.OnActionCreate;
 import cat.institutmarianao.shipmentsws.validation.groups.OnShipmentCreate;
 import jakarta.validation.Valid;
@@ -13,6 +19,7 @@ import jakarta.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -31,20 +38,19 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public List<Shipment> findAll(Shipment.Status status, String receivedBy, String courierAssigned, Shipment.Category category, Date from, Date to) {
-        // TODO: Implement logic to find all shipments
-        return null;
+		return shipmentRepository.findAll();
     }
 
     @Override
-    public List<Shipment> findAllPending(String receivedBy, String courierAssigned, Shipment.Category category, Date from, Date to) {
-        // TODO: Implement logic to find all pending shipments
-        return null;
+    public List<Shipment> findAllPending(String receivedBy, String courierAssigned, Category category, Date from, Date to) {
+    	Specification<Shipment> pendingSpec = new ShipmentPending(Shipment.Status.PENDING);
+    	return shipmentRepository.findAll(pendingSpec);
     }
 
     @Override
-    public List<Shipment> findAllInProcess(String receivedBy, String courierAssigned, Shipment.Category category, Date from, Date to) {
-        // TODO: Implement logic to find all shipments in process
-        return null;
+    public List<Shipment> findAllInProcess(String receivedBy, String courierAssigned, Category category, Date from, Date to) {
+    	Specification<Shipment> spec = Specification.where(new ShipmentInProgress(Shipment.Status.IN_PROCESS));
+    	return shipmentRepository.findAll(spec);
     }
 
     @Override
