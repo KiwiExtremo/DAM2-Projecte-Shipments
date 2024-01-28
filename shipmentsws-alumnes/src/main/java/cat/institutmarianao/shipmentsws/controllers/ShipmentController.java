@@ -101,7 +101,22 @@ public class ShipmentController {
 
 		return shipmentService.findAllInProcess(receivedBy, courierAssigned, category, from, to);
 	}
+	
+	/* Swagger */
+	@Operation(summary = "Find all DELIVERED shipments")
+	@ApiResponse(responseCode = "200", content = {
+			@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Shipment.class))) }, description = "Shipments retrieved ok")
+	/**/
+	@GetMapping("/find/all/DELIVERED")
+	public List<Shipment> findAllDelivered(@RequestParam(value = "receivedBy", required = false) String receivedBy,
+			@RequestParam(value = "courierAssigned", required = false) String courierAssigned,
+			@RequestParam(value = "category", required = false) Category category,
+			@RequestParam(value = "from", required = false) @DateTimeFormat(pattern = ShipmentswsApplication.DATE_PATTERN) @Parameter(description = ShipmentswsApplication.DATE_PATTERN) Date from,
+			@RequestParam(value = "to", required = false) @DateTimeFormat(pattern = ShipmentswsApplication.DATE_PATTERN) @Parameter(description = ShipmentswsApplication.DATE_PATTERN) Date to) {
 
+		// TODO find all shipments in process (shipments with assignment or interventions)
+		return null;
+	}
 	/* Swagger */
 	@Operation(summary = "Get shipment by id")
 	@ApiResponse(responseCode = "200", content = {

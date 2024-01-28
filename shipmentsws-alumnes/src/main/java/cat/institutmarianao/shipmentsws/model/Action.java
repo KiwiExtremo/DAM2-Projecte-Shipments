@@ -20,7 +20,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 @Data
 @NoArgsConstructor
 @SuperBuilder
@@ -30,7 +29,6 @@ import lombok.experimental.SuperBuilder;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "actions")
 @JsonIgnoreProperties("shipment")
-
 public abstract class Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,7 +52,7 @@ public abstract class Action implements Serializable {
     @Column(insertable = false, updatable = false)
     protected Type type;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "performer_username")
     protected User performer;
 

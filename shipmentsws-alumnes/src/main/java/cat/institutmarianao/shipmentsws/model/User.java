@@ -9,7 +9,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
+import org.hibernate.annotations.DiscriminatorFormula;
+import org.hibernate.mapping.Set;
+
+import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -39,6 +48,7 @@ import lombok.experimental.SuperBuilder;
 @JsonSubTypes({ @Type(value = Receptionist.class, name = User.RECEPTIONIST),
 		@Type(value = LogisticsManager.class, name = User.LOGISTICS_MANAGER),
 		@Type(value = Courier.class, name = User.COURIER) })
+
 public abstract class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
