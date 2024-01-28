@@ -1,12 +1,19 @@
 package cat.institutmarianao.shipmentsws.model;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import org.hibernate.annotations.DiscriminatorFormula;
+import org.hibernate.mapping.Set;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.*;
-
+import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
@@ -14,10 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import java.io.Serializable;
 
 /* Lombok */
 @Data
@@ -27,12 +31,16 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "user_role")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "role", visible = true)
+@DiscriminatorFormula(discriminatorType = DiscriminatorType.STRING, value = "role")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonTypeInfo(
+	use = JsonTypeInfo.Id.NAME,
+	property= "role"
+)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = Receptionist.class, name = User.RECEPTIONIST),
-        @JsonSubTypes.Type(value = LogisticsManager.class, name = User.LOGISTICS_MANAGER),
-        @JsonSubTypes.Type(value = Courier.class, name = User.COURIER)
+	@JsonSubTypes.Type(value = Courier.class, name = "COURIER"),
+	@JsonSubTypes.Type(value = Receptionist.class, name = "RECEPTIONIST"),
+	@JsonSubTypes.Type(value = LogisticsManager.class, name = "LOGISTIC_MANAGER"),
 })
 public abstract class User implements Serializable {
 
@@ -58,17 +66,25 @@ public abstract class User implements Serializable {
     @EqualsAndHashCode.Include
     @Id
     @Column(name = "username", nullable = false, length = MAX_USERNAME)
+    @JsonProperty("username")
     protected String username;
-
-    @Column(name = "role", nullable = false, length = MAX_FULL_NAME, columnDefinition = "varchar(31)")
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = MAX_FULL_NAME)
+    @JsonProperty("role")
     protected Role role;
 
     @Column(name = "password", nullable = false)
+    @JsonProperty("password")
     protected String password;
 
     @Column(name = "full_name", nullable = false, length = MAX_FULL_NAME)
+    @JsonProperty("fullName")
     protected String fullName;
 
     @Column(name = "extension")
+    @JsonProperty("extension")
     protected Integer extension;
+    
+    
 }

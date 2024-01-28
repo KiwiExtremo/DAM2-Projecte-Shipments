@@ -1,18 +1,18 @@
 package cat.institutmarianao.shipmentsws.model;
 
-import java.io.Serializable;
-import java.util.List;
-
-import jakarta.persistence.*;
-
-import org.hibernate.annotations.Formula;
-
-import lombok.AccessLevel;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
+
+import java.io.Serializable;
+import java.util.List;
 
 /* Lombok */
 @Data
@@ -21,6 +21,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "shipments")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Shipment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,42 +44,54 @@ public class Shipment implements Serializable {
     @EqualsAndHashCode.Include
     @Id
     @Column(name = "id")
+    @JsonProperty("id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
+    @JsonProperty("category")
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
+    @JsonProperty("sender")
     private Address sender;
 
     @ManyToOne
     @JoinColumn(name = "recipient_id")
+    @JsonProperty("recipient")
     private Address recipient;
 
     @Column(name = "weight")
+    @JsonProperty("weight")
     private Float weight;
 
     @Column(name = "height")
+    @JsonProperty("height")
     private Float height;
 
     @Column(name = "width")
+    @JsonProperty("width")
     private Float width;
 
     @Column(name = "length")
+    @JsonProperty("length")
     private Float length;
 
     @Column(name = "express")
+    @JsonProperty("express")
     private Boolean express;
 
     @Column(name = "fragile")
+    @JsonProperty("fragile")
     private Boolean fragile;
 
     @Column(name = "note", length = MAX_DESCRIPTION)
+    @JsonProperty("note")
     private String note;
 
     @OneToMany(mappedBy = "shipment")
+    @JsonProperty("tracking")
     private List<Action> tracking;
 
     /* JPA */
@@ -90,6 +103,7 @@ public class Shipment implements Serializable {
             + " WHERE a.date=( SELECT MAX(last_action.date) FROM actions last_action "
             + " WHERE last_action.shipment_id=a.shipment_id AND last_action.shipment_id=id ))")
     // Lombok
-    @Setter(AccessLevel.NONE)
+    @Setter
+    @JsonProperty("status")
     private Status status;
 }
