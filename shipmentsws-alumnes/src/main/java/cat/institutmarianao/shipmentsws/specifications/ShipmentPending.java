@@ -10,15 +10,12 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 public class ShipmentPending implements Specification<Shipment> {
-	
 	private static final long serialVersionUID = 1L;
 	private Status status;
-	
 	
 	public ShipmentPending(Status status) {
         this.status = status;
     }
-
 
 	@Override
 	public Predicate toPredicate(Root<Shipment> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {

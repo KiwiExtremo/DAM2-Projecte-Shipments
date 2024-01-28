@@ -20,11 +20,11 @@ public interface ShipmentService {
     
     Shipment getByShipmentId(@Positive Long shipmentId);
     
-    List<Action> findTrackingByShipmentId(@Positive Long shipmentId);
+    List<Action> findTrackingByTicketId(@Positive Long shipmentId);
 
     Shipment saveShipment(@NotNull @Valid Shipment shipment);
     
     Action saveAction(@NotNull @Valid Action action);
 
-    void deleteByShipmentId(Long id);
+    void deleteByShipmentId(@Positive Long shipmentId);
 }
