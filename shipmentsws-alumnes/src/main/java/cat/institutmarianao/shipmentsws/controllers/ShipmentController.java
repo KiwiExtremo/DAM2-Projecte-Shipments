@@ -20,8 +20,11 @@ import cat.institutmarianao.shipmentsws.model.Action;
 import cat.institutmarianao.shipmentsws.model.Shipment;
 import cat.institutmarianao.shipmentsws.model.Shipment.Category;
 import cat.institutmarianao.shipmentsws.model.Shipment.Status;
+
 import cat.institutmarianao.shipmentsws.services.ShipmentService;
 import cat.institutmarianao.shipmentsws.services.UserService;
+// import cat.institutmarianao.shipmentsws.services.ActionService;
+
 import cat.institutmarianao.shipmentsws.validation.groups.OnActionCreate;
 import cat.institutmarianao.shipmentsws.validation.groups.OnShipmentCreate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,12 +47,12 @@ public class ShipmentController {
 
 	@Autowired
 	private UserService userService;
-//
+
 	@Autowired
 	private ShipmentService shipmentService;
-//
-//	@Autowired
-//	private ActionService actionService;
+
+	// @Autowired
+	// private ActionService actionService;
 
 
 	/* Swagger */
@@ -65,8 +68,7 @@ public class ShipmentController {
 			@RequestParam(value = "from", required = false) @DateTimeFormat(pattern = ShipmentswsApplication.DATE_PATTERN) @Parameter(description = ShipmentswsApplication.DATE_PATTERN) Date from,
 			@RequestParam(value = "to", required = false) @DateTimeFormat(pattern = ShipmentswsApplication.DATE_PATTERN) @Parameter(description = ShipmentswsApplication.DATE_PATTERN) Date to) {
 
-		// TODO find all shipments
-		return null;
+		return shipmentService.findAll(status, receivedBy, courierAssigned, category, from, to);
 	}
 
 	/* Swagger */
@@ -97,8 +99,7 @@ public class ShipmentController {
 			@RequestParam(value = "from", required = false) @DateTimeFormat(pattern = ShipmentswsApplication.DATE_PATTERN) @Parameter(description = ShipmentswsApplication.DATE_PATTERN) Date from,
 			@RequestParam(value = "to", required = false) @DateTimeFormat(pattern = ShipmentswsApplication.DATE_PATTERN) @Parameter(description = ShipmentswsApplication.DATE_PATTERN) Date to) {
 
-		// TODO find all shipments in process (shipments with assignment or interventions)
-		return null;
+		return shipmentService.findAllInProcess(receivedBy, courierAssigned, category, from, to);
 	}
 	
 	/* Swagger */
@@ -125,8 +126,7 @@ public class ShipmentController {
 	/**/
 	@GetMapping("/get/by/id/{shipmentId}")
 	public Shipment findById(@PathVariable("shipmentId") @Positive Long shipmentId) {
-		// TODO find a shipment by its id
-		return null;
+		return shipmentService.getByShipmentId(shipmentId);
 	}
 
 	/* Swagger */
@@ -136,8 +136,7 @@ public class ShipmentController {
 	/**/
 	@GetMapping("/find/tracking/by/id/{shipmentId}")
 	public List<Action> findTrackingByTicketId(@PathVariable("shipmentId") @Positive Long shipmentId) {
-		// TODO find all actions of a shipment
-		return null;
+		return shipmentService.findTrackingByTicketId(shipmentId);
 	}
 
 	/* Swagger */
@@ -149,8 +148,8 @@ public class ShipmentController {
 	@Validated(OnShipmentCreate.class)
 	//public Shipment reception(@Parameter(schema = @Schema(implementation = Shipment.class)) @RequestBody @Valid Shipment shipment) {
 	public Shipment reception(@RequestBody @Valid Shipment shipment) {
-		// TODO save a shipment (with its reception action)
-		return null;
+		
+		return shipmentService.saveShipment(shipment);
 	}
 	
 	
@@ -162,8 +161,7 @@ public class ShipmentController {
 	@PostMapping("/save/action")
 	@Validated(OnActionCreate.class)
 	public Action saveAction(@RequestBody @Valid Action action) {
-		// TODO save an action (assignment or delivery) of the shipment
-		return null;
+		return shipmentService.saveAction(action);
 	}
 
 	/* Swagger */
@@ -173,7 +171,6 @@ public class ShipmentController {
 	/**/
 	@DeleteMapping("/delete/by/id/{shipment_id}")
 	public void deleteById(@PathVariable("shipment_id") @Positive Long shipmentId) {
-
-		// TODO delete a shipment by its id
+		shipmentService.deleteByShipmentId(shipmentId);
 	}
 }

@@ -3,6 +3,7 @@ package cat.institutmarianao.shipmentsws.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
@@ -27,6 +28,7 @@ import lombok.experimental.SuperBuilder;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "actions")
+@JsonIgnoreProperties("shipment")
 public abstract class Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

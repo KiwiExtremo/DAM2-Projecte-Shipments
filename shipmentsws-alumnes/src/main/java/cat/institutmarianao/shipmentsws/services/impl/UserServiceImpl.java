@@ -17,15 +17,14 @@ import cat.institutmarianao.shipmentsws.model.User;
 import cat.institutmarianao.shipmentsws.model.User.Role;
 import cat.institutmarianao.shipmentsws.repositories.UserRepository;
 import cat.institutmarianao.shipmentsws.services.UserService;
-import cat.institutmarianao.shipmentsws.specifications.UserWithFullName;
 import cat.institutmarianao.shipmentsws.specifications.UserWithRole;
 import cat.institutmarianao.shipmentsws.validation.groups.OnUserCreate;
 import cat.institutmarianao.shipmentsws.validation.groups.OnUserUpdate;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.ValidationException;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 /*import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;*/
@@ -36,30 +35,33 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public User authenticate(@NotEmpty String username, @NotEmpty String password) {
 		User user = getByUsername(username);
-		
-		/*Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-		logger.info("PWD"+password);
-		logger.info("BDPWD"+user.getPassword());*/
-		
-		if (!passwordEncoder.matches(password, user.getPassword()))
-			throw new ValidationException(messageSource.getMessage("error.UserService.user.password", new Object[] { username }, LocaleContextHolder.getLocale()));
-		
+
+		/*
+		 * Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+		 * logger.info("PWD"+password); logger.info("BDPWD"+user.getPassword());
+		 */
+
+		if (!passwordEncoder.matches(password, user.getPassword())) {
+			throw new ValidationException(messageSource.getMessage("error.UserService.user.password",
+					new Object[] { username }, LocaleContextHolder.getLocale()));
+		}
+
 		return user;
 	}
-	
+
 	@Override
 	public List<User> findAll(Role[] roles, String fullName) {
-		Specification<User> spec = Specification.where(new UserWithRole(roles)).and(new UserWithFullName(fullName));
+		Specification<User> spec = Specification.where(new UserWithRole(roles));
 		return userRepository.findAll(spec);
 	}
 
@@ -71,11 +73,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Validated(OnUserCreate.class)
 	public User save(@NotNull @Valid User user) {
-		/*if (!Role.LOGISTICS_MANAGER.equals(performer.getRole())) {
-			String errorMerrage = messageSource.getMessage("error.Performer.is.not.valid", null, LocaleContextHolder.getLocale());
-			throw new ValidationException (errorMerrage);
-		}*/
-		
+		/*
+		 * if (!Role.LOGISTICS_MANAGER.equals(performer.getRole())) { String
+		 * errorMerrage = messageSource.getMessage("error.Performer.is.not.valid", null,
+		 * LocaleContextHolder.getLocale()); throw new ValidationException
+		 * (errorMerrage); }
+		 */
+
 		User ret = userRepository.saveAndFlush(user);
 		return ret;
 	}
@@ -96,7 +100,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		if (user instanceof Receptionist receptionist && dbUser instanceof Receptionist dbReceptionist) {
-			
+
 			if (receptionist.getOffice() != null) {
 				dbReceptionist.setOffice(receptionist.getOffice());
 			}
