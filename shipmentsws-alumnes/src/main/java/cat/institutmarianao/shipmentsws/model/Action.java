@@ -60,4 +60,7 @@ public abstract class Action implements Serializable {
     @ManyToOne
     @JoinColumn(name = "shipment_id", nullable = false)
     protected Shipment shipment;
+    
+    @Transient
+    protected Long idShipment;
 }
